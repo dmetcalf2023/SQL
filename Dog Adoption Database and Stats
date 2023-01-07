@@ -28,4 +28,6 @@ SELECT id, breed, MAX(age) FROM dogs GROUP BY breed ORDER BY age asc;
 
 SELECT AVG(age) "Average Female Dog Age" FROM dogs WHERE sex = "f";
 
+### The code below shows the average age of male dogs for adoption ###
 
+SELECT AVG(age) "Average Male Dog Age" FROM dogs WHERE sex = "m";
