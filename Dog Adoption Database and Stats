@@ -1,4 +1,4 @@
-# In this SQL, I have created a dog adoption database that allows for tables to categorize the dogs by breed, whether or not the dog has been fixed, type of coat, age, and sex.
+-- In this SQL, I have created a dog adoption database that allows for tables to categorize the dogs by breed, whether or not the dog has been fixed, type of coat, age, and sex.
 
 CREATE TABLE dogs (id INTEGER PRIMARY KEY, breed TEXT, fixed TEXT, coat TEXT , age INTEGER, sex TEXT);
 INSERT INTO dogs VALUES(1, "German Shepherd", "yes" , "short", 5, "f");
@@ -17,17 +17,17 @@ INSERT INTO dogs VALUES(13, "Dalmation", "no" , "short", 1, "f");
 INSERT INTO dogs VALUES(14, "Border Terrier", "no" , "wiry", 8, "m");
 INSERT INTO dogs VALUES(15, "Dachshund", "yes" , "long", 3, "m");
 
-### The code below shows the database ###
+-- The code below shows the database
 SELECT * FROM dogs;
 
-### The code below displays the database ordered by the breeds' ages in ascending order ###
+-- The code below displays the database ordered by the breeds' ages in ascending order 
 
 SELECT id, breed, MAX(age) FROM dogs GROUP BY breed ORDER BY age asc;
 
-### The code below shows the average age of female dogs for adoption ###
+-- The code below shows the average age of female dogs for adoption 
 
 SELECT AVG(age) "Average Female Dog Age" FROM dogs WHERE sex = "f";
 
-### The code below shows the average age of male dogs for adoption ###
+-- The code below shows the average age of male dogs for adoption 
 
 SELECT AVG(age) "Average Male Dog Age" FROM dogs WHERE sex = "m";
