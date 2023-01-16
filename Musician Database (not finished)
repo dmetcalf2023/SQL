@@ -1,0 +1,37 @@
+-- Table of musicians' name, age, and height
+
+CREATE TABLE musicians (id INTEGER PRIMARY KEY AUTOINCREMENT, fullname TEXT, age INTEGER, height_in INTEGER);
+
+INSERT INTO musicians (fullname, age, height_in) VALUES ("Gerard Way", "45", "70");
+INSERT INTO musicians (fullname, age, height_in) VALUES ("Mikey Way", "42", "70");
+INSERT INTO musicians (fullname, age, height_in) VALUES ("Frank Iero", "41", "66");
+INSERT INTO musicians (fullname, age, height_in) VALUES ("Ray Toro", "45", "73");
+
+-- Table of the instruments played by each musician
+
+CREATE TABLE instrument (id INTEGER PRIMARY KEY AUTOINCREMENT, person_id INTEGER, name TEXT);
+
+INSERT INTO instrument (person_id, name) VALUES (1, "vocals");
+INSERT INTO instrument (person_id, name) VALUES (2, "bass");
+INSERT INTO instrument (person_id, name) VALUES (3, "rhythm guitar");
+INSERT INTO instrument (person_id, name) VALUES (4, "lead guitar");
+
+-- Table of personal life information 
+
+CREATE TABLE life (id INTEGER PRIMARY KEY AUTOINCREMENT, person_id INTEGER, spouse TEXT, kids INTEGER, origin TEXT);
+
+INSERT INTO life (person_id, spouse, kids, origin) VALUES (1, "Lyn-Z", "1", "New Jersey");
+INSERT INTO life (person_id, spouse, kids, origin) VALUES (2, "Kristin Blanford", "2", "New Jersey");
+INSERT INTO life (person_id, spouse, kids, origin) VALUES (3, "Jamia Nestor", "3", "New Jersey");
+INSERT INTO life (person_id, spouse, kids, origin) VALUES (4, "Christa Toro", "2", "New Jersey");
+
+-- What instrument does each musician play?
+
+SELECT m.fullname, i.name
+FROM musicians m
+JOIN instrument i
+ON m.id = i.person_id;
+
+-- Personal life of each musician
+
+SELECT 
