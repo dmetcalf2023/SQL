@@ -1,37 +1,69 @@
--- Table of musicians' name, age, and height
+-- Table of musicians' name, age, and height from the band My Chemical Romance
 
-CREATE TABLE musicians (id INTEGER PRIMARY KEY AUTOINCREMENT, fullname TEXT, age INTEGER, height_in INTEGER);
+CREATE TABLE musicians (id INTEGER PRIMARY KEY AUTOINCREMENT, fullname TEXT, age INTEGER, height_in INTEGER, spouse_id INTEGER);
 
-INSERT INTO musicians (fullname, age, height_in) VALUES ("Gerard Way", "45", "70");
-INSERT INTO musicians (fullname, age, height_in) VALUES ("Mikey Way", "42", "70");
-INSERT INTO musicians (fullname, age, height_in) VALUES ("Frank Iero", "41", "66");
-INSERT INTO musicians (fullname, age, height_in) VALUES ("Ray Toro", "45", "73");
+INSERT INTO musicians (fullname, age, height_in, spouse_id) VALUES ("Gerard Way", "45", "70", 2);
+INSERT INTO musicians (fullname, age, height_in, spouse_id) VALUES ("Mikey Way", "42", "70", 3);
+INSERT INTO musicians (fullname, age, height_in, spouse_id) VALUES ("Frank Iero", "41", "66", 4);
+INSERT INTO musicians (fullname, age, height_in, spouse_id) VALUES ("Ray Toro", "45", "73", 5);
+
+-- Musicians' info: name, age, height (in inches), spouse id
+
+SELECT * FROM musicians;
 
 -- Table of the instruments played by each musician
 
-CREATE TABLE instrument (id INTEGER PRIMARY KEY AUTOINCREMENT, person_id INTEGER, name TEXT);
+CREATE TABLE instrument (id INTEGER PRIMARY KEY AUTOINCREMENT, person_id INTEGER, instrument_name TEXT);
 
-INSERT INTO instrument (person_id, name) VALUES (1, "vocals");
-INSERT INTO instrument (person_id, name) VALUES (2, "bass");
-INSERT INTO instrument (person_id, name) VALUES (3, "rhythm guitar");
-INSERT INTO instrument (person_id, name) VALUES (4, "lead guitar");
+INSERT INTO instrument (person_id, instrument_name) VALUES (1, "vocals");
+INSERT INTO instrument (person_id, instrument_name) VALUES (2, "bass");
+INSERT INTO instrument (person_id, instrument_name) VALUES (3, "rhythm guitar");
+INSERT INTO instrument (person_id, instrument_name) VALUES (4, "lead guitar");
 
--- Table of personal life information 
+-- Table of personal life information
 
-CREATE TABLE life (id INTEGER PRIMARY KEY AUTOINCREMENT, person_id INTEGER, spouse TEXT, kids INTEGER, origin TEXT);
+CREATE TABLE life (id INTEGER PRIMARY KEY AUTOINCREMENT, person_id INTEGER, /*spouse TEXT,*/ kids INTEGER, origin TEXT);
 
-INSERT INTO life (person_id, spouse, kids, origin) VALUES (1, "Lyn-Z", "1", "New Jersey");
-INSERT INTO life (person_id, spouse, kids, origin) VALUES (2, "Kristin Blanford", "2", "New Jersey");
-INSERT INTO life (person_id, spouse, kids, origin) VALUES (3, "Jamia Nestor", "3", "New Jersey");
-INSERT INTO life (person_id, spouse, kids, origin) VALUES (4, "Christa Toro", "2", "New Jersey");
+INSERT INTO life (person_id, kids, origin) VALUES (1, "1", "New Jersey");
+INSERT INTO life (person_id, kids, origin) VALUES (2, "2", "New Jersey");
+INSERT INTO life (person_id, kids, origin) VALUES (3, "3", "New Jersey");
+INSERT INTO life (person_id, kids, origin) VALUES (4, "2", "New Jersey");
+
+-- How many kids does each musician have and where are they from?
+
+SELECT * FROM life;
+
+CREATE TABLE spouse (id INTEGER PRIMARY KEY AUTOINCREMENT, person_id INTEGER, name TEXT);
+
+INSERT INTO spouse (person_id, name) VALUES (2, "Lyn-Z");
+INSERT INTO spouse (person_id, name) VALUES (3, "Kristin Blanford");
+INSERT INTO spouse (person_id, name) VALUES (4, "Jamia Nestor");
+INSERT INTO spouse (person_id, name) VALUES (1, "Christa Toro");
+
+-- Who are their spouses?
+
+SELECT * FROM spouse;
 
 -- What instrument does each musician play?
 
-SELECT m.fullname, i.name
+SELECT m.fullname "Musician", i.instrument_name "Instrument"
 FROM musicians m
 JOIN instrument i
 ON m.id = i.person_id;
 
--- Personal life of each musician
+-- Musician's age and instrument
 
-SELECT 
+SELECT m.fullname, m.age "Musician Age", i.instrument_name
+FROM musicians m 
+JOIN instrument i
+ON m.id = i.id;
+
+-- Who is the spouse of the person who plays the bass?
+
+SELECT instrument.instrument_name, spouse.name "Spouse Related to Instrument" FROM instrument
+LEFT JOIN spouse
+ON instrument.id = spouse.id
+WHERE instrument.instrument_name = "bass";
+
+    
+
