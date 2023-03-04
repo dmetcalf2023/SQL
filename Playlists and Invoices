@@ -1,0 +1,137 @@
+This SQL uses the chinook database and shows the connections between media types, genres, playlists, tracks, and artist. It also describes invoices by what customers bought which albums and which employee helped the customer.
+
+----------------------------------------------------------------------------------------------------------------------
+SELECT * FROM chinook.customers
+
+-- 1. Customers with the last name starting with B and phone number starting 
+SELECT FirstName, LastName, Phone FROM chinook.customers
+WHERE LastName Like 'B%'
+AND Phone LIKE '+1%';
+
+----------------------------------------------------------------------------------------------------------------------
+SELECT * FROM chinook.albums
+
+-- 2. How many albums did the band with ArtistId 58 make?
+SELECT ArtistId, COUNT(*)
+FROM chinook.albums
+WHERE ArtistId IS 58;
+
+----------------------------------------------------------------------------------------------------------------------
+Select * FROM chinook.media_types
+Select * FROM chinook.tracks
+
+-- 3. What type of media does each track use?
+SELECT tracks.Name AS 'Track Name', media.Name AS 'Media Type Name'
+FROM chinook.tracks tracks
+LEFT JOIN chinook.media_types media
+ON tracks.MediaTypeID = media.MediaTypeID;
+
+----------------------------------------------------------------------------------------------------------------------
+SELECT * FROM chinook.employees
+SELECT * FROM chinook.invoices
+SELECT * FROM chinook.customers
+
+
+-- 4. Which sales agent made the most dollars in sales in 2009?
+SELECT emp.FirstName, emp.LastName, ROUND(SUM(inv.Total), 2) AS 'Total Sales'
+FROM chinook.employees emp
+
+JOIN chinook.customers cust
+ON  emp.EmployeeId = cust.SupportRepId
+
+JOIN chinook.invoices inv
+ON cust.CustomerId = inv.CustomerId
+
+WHERE inv.InvoiceDate LIKE '2009%'
+AND emp.Title = 'Sales Support Agent'
+
+GROUP BY emp.FirstName
+ORDER BY (ROUND(SUM(inv.Total), 2)) desc limit 1;
+
+
+----------------------------------------------------------------------------------------------------------------------
+SELECT * FROM chinook.tracks
+
+
+-- 5. How many milliseconds make up all tracks with AlbumId 5?
+SELECT SUM(Milliseconds)
+FROM chinook.tracks
+WHERE AlbumId = '5';
+
+----------------------------------------------------------------------------------------------------------------------
+SELECT * FROM chinook.albums
+SELECT * FROM chinook.artists
+SELECT * FROM chinook.tracks
+
+
+-- 6. Artist with name starting with C to Album Title to Track Name
+SELECT artist.Name AS 'Artist', album.Title AS 'Album Title', track.Name AS 'Track Name'
+FROM chinook.artists artist
+
+JOIN chinook.albums album
+ON album.artistid = artist.artistid
+
+JOIN chinook.tracks track
+ON track.albumid = album.albumid
+
+
+WHERE Artist LIKE 'C%'
+GROUP BY Artist;
+
+
+----------------------------------------------------------------------------------------------------------------------
+SELECT * FROM chinook.albums
+SELECT * FROM chinook.artists
+SELECT * FROM chinook.customers
+SELECT * FROM chinook.employees
+SELECT * FROM chinook.genres
+SELECT * FROM chinook.invoice_items
+SELECT * FROM chinook.invoices
+SELECT * FROM chinook.media_types
+SELECT * FROM chinook.playlist_track
+SELECT * FROM chinook.playlists
+SELECT * FROM chinook.tracks
+
+
+-- 7. How the tracks are related to customers and employees
+SELECT media.name AS 'Media', track.Bytes, genre.name AS 'Genre', pt.trackid, /* playlist.name AS 'Playlist_Name', /*album.title AS 'AlbumTitle', artist.name AS 'Artist',*/ invoice_items.UnitPrice AS 'Price', invoice_items.Quantity AS 'Quantity', invoice.BillingCity AS 'Billing_City', invoice.CustomerId, customer.company AS 'Customer_Company', employee.FirstName AS 'Employee_First_Name', employee.LastName AS 'Employee_Last_Name'
+FROM chinook.media_types media
+
+JOIN chinook.tracks track
+ON media.mediatypeid = track.mediatypeid
+
+JOIN chinook.genres genre
+ON genre.genreid = track.genreid
+
+JOIN chinook.playlist_track pt
+ON pt.trackid = track.trackid
+
+JOIN chinook.playlists playlist
+ON playlist.playlistid = pt.playlistid
+
+JOIN chinook.albums album
+ON track.albumid = track.albumid
+
+JOIN chinook.artists artist
+ON artist.artistid = album.artistid
+
+JOIN chinook.invoice_items invoice_items
+ON invoice_items.trackid = track.trackid
+
+JOIN chinook.invoices invoice
+ON invoice.invoiceid = invoice_items.invoiceid
+
+JOIN chinook.customers customer
+ON customer.customerid = invoice.customerid
+
+JOIN chinook.employees employee
+ON customer.supportrepid = employee.employeeid
+
+
+
+WHERE customer.company <> 'NULL'
+AND track.composer <> 'NULL'
+
+
+GROUP BY track.Bytes, media.name;
+
